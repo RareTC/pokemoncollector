@@ -10,6 +10,10 @@
       <p>Description: {{ pokemon.description | linebreaks }}</p>
       <p>Weakness: {{ pokemon.weakness }}</p>
     </div>
+    <div class="card-action">
+      <a href="{% url 'pokemons_update' pokemon.id %}">Edit</a>
+      <a href="{% url 'pokemons_delete' pokemon.id %}">Delete</a>
+    </div>
   </div>
 
 {% endblock %} 
