@@ -4,11 +4,21 @@ body {
     flex-direction: column;
   }
   
+  #title {
+    font-family: 'Pokemon Solid', sans-serif;
+    color: #FFCB05;
+  }
+
   main {
     flex: 1 0 auto;
+  }
+
+  #navbar {
+    background: linear-gradient(.25turn, red, #D3D3D3, blue);
   }
   
   footer.page-footer {
     padding-top: 0;
     text-align: right;
+    background: linear-gradient(.25turn, red, #D3D3D3, blue);
   }

@@ -1,6 +1,13 @@
 from django.db import models
 from django.urls import reverse
 
+POKEBALLS = (
+    ('P', 'Pokeball'),
+    ('G', 'Great ball'),
+    ('M', 'Master ball'),
+    ('N', 'Net ball'),
+)
+
 # Create your models here.
 class Pokemon(models.Model):
     name = models.CharField(max_length=100)
@@ -13,3 +20,20 @@ class Pokemon(models.Model):
     
     def get_absolute_url(self):
         return reverse('detail', kwargs={'pokemon_id': self.id})
+    
+class Captured(models.Model):
+    date = models.DateField('Captured Date')
+    pokeball = models.CharField(
+        max_length=1,
+        choices=POKEBALLS,
+        default=POKEBALLS[0][0]
+        )
+    
+    # Create a FK 
+    pokemon = models.ForeignKey(
+        Pokemon,
+        on_delete=models.CASCADE
+    )
+
+    def __str__(self):
+        return f"Caught with {self.get_pokeball_display()} on {self.date}"
