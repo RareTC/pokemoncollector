@@ -82,7 +82,7 @@ WSGI_APPLICATION = 'pokemoncollector.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'trevorjakecampbell/pokemoncollector',
+        'NAME': 'trevorjakecampbell/pokemoncollectors',
         'USER': os.environ['DB_USER'],
         'PASSWORD': os.environ['DB_PW'],
         'HOST': 'db.bit.io',
