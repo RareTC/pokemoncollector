@@ -1,19 +1,111 @@
+
+
 {% extends 'base.html' %}
 {% block content %}
 
 <h1>Captured Pokemon</h1>
 
-  <div class="card">
-    <div class="card-content">
-      <span class="card-title">{{ pokemon.name }}</span>
-      <p>Type: {{ pokemon.kind }}</p>
-      <p>Description: {{ pokemon.description | linebreaks }}</p>
-      <p>Weakness: {{ pokemon.weakness }}</p>
-    </div>
-    <div class="card-action">
-      <a href="{% url 'pokemons_update' pokemon.id %}">Edit</a>
-      <a href="{% url 'pokemons_delete' pokemon.id %}">Delete</a>
+<div class="row">
+  <div class="col s6">
+    <div class="card">
+      <div class="card-content">
+        <span class="card-title">{{ pokemon.name }}</span>
+        <p>Type: {{ pokemon.kind }}</p>
+        <p>Description: {{ pokemon.description | linebreaks }}</p>
+        <p>Weakness: {{ pokemon.weakness }}</p>
+      </div>
+      <div class="card-action">
+        <a href="{% url 'pokemons_update' pokemon.id %}">Edit</a>
+        <a href="{% url 'pokemons_delete' pokemon.id %}">Delete</a>
+      </div>
     </div>
   </div>
+  <div class="col s6">
+    <form action="{% url 'add_capture' pokemon.id %}" method="POST">
+      {% csrf_token %}
+      <!-- Render the inputs as._p is wrapping as a ptag <p> -->
+      {{ captured_form.as_p }}
+      <input type="submit" class="btn" value="Add Capture">
+    </form>
+    <br>
+    {% if pokemon.caught %}
+      <div class="card-panel blue-text center-align">Congratulations on catching a {{pokemon.name}}!</div>
+    {% else %}
+      <div class="card-panel red-text center-align">Hope you catch a {{pokemon.name}} soon.</div>
+    {% endif %}
+    <table class="striped">
+      <thead>
+        <tr><th>Caught On</th><th>Caught With</th></tr>
+      </thead>
+      <tbody>
+        {% for captured in pokemon.captured_set.all %}
+          <tr>
+            <td>{{captured.date}}</td>
+            <td>{{captured.get_pokeball_display}}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
 
-{% endblock %} 
+<hr>
+<div class="row">
+  <div class="col s6">
+    <h3>{{ pokemon.name }}'s Moves</h3>
+    {% if pokemon.moves.count %}
+      {% for move in pokemon.moves.all %}
+        <div class="card">
+          <div class="card-content">
+            <span class="card-title">
+              {{ move.name }}
+            </span>
+          </div>
+          <div class="card-action">
+            <form action="{% url 'unassoc_move' pokemon.id move.id %}" method="POST">
+              {% csrf_token %}
+              <button type="submit" class="btn">Remove</button>
+            </form>
+        </div>
+      {% endfor %}
+    {% else %}
+      <h5>No Moves</h5>
+    {% endif %}
+    <div class="col s6">
+      <h3>Available Moves</h3>
+      {% if moves.count %}
+        {% for move in moves.all %}
+          <div class="card">
+            <div class="card-content">
+              <span class="card-title">
+                {{move.name}}
+              </span>
+            </div>
+            <div class="card-action">
+              <form action="{% url 'assoc_move' move.id move.id %}" method="POST">
+                {% csrf_token %}
+                <button type="submit" class="btn">Add</button>
+              </form>
+            </div>
+          </div>
+        {% endfor %}
+      {% else %}
+        <h5>{{pokemon.name}} has learned all his moves</h5>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<script>
+  const dateEl = document.getElementById('id_date');
+  M.Datepicker.init(dateEl, {
+    format: 'yyyy-mm-dd',
+    defaultDate: new Date(),
+    setDefaultDate: true,
+    autoClose: true
+  });
+
+  const selectEl = document.getElementById('id_pokeball');
+  M.FormSelect.init(selectEl);
+</script>
+{% endblock %}

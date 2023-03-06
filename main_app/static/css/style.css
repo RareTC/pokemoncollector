@@ -2,6 +2,7 @@ body {
     display: flex;
     min-height: 100vh;
     flex-direction: column;
+    background: linear-gradient(120deg, #fdfbfb 0%, #ebedee 100%);
   }
   
   #title {
@@ -15,6 +16,10 @@ body {
 
   #navbar {
     background: linear-gradient(.25turn, red, #D3D3D3, blue);
+  }
+
+  #main-content {
+    color: black;
   }
   
   footer.page-footer {
